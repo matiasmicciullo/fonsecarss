@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehículos – FONSECARSS</title>
+  <link rel="stylesheet" href="fc-style.css">
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <a href="FonseCars.html"><img src="logo.png" class="logo" alt="FONSECARSS"></a>
+      <div class="nav-links">
+        <a href="FonseCars.html">Inicio</a>
+        <a href="vehiculos.html">Vehículos</a>
+        <a href="Financiamiento.html">Financiamiento</a>
+        <a href="Contacto.html">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="autos-section">
+    <h2>Vehículos Disponibles</h2>
+    
+    <div class="filtros-vehiculos">
+  <button data-categoria="Todos" class="filtro activo">Todos</button>
+  <button data-categoria="Usado" class="filtro">Usados</button>
+  <button data-categoria="0Km" class="filtro">0Km</button>
+  <button data-categoria="Utilitario" class="filtro">Utilitarios</button>
+  </div>
+
+    <div id="vehiculos-grid" class="cards">
+      <!-- Aquí se cargarán los vehículos dinámicamente -->
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+       <div class="footer-box">
+      <h3>Instagram</h3>
+      <a class="ig-link" href="https://instagram.com/fonsecarss" target="_blank">
+        <svg class="icon" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M349.33 69.33H162.67A93.42 93.42 0 0 0 69.33 162.67v186.66A93.42 93.42 0 0 0 162.67 442.67h186.66A93.42 93.42 0 0 0 442.67 349.33V162.67A93.42 93.42 0 0 0 349.33 69.33zm-93.33 277.34a96 96 0 1 1 96-96 96.11 96.11 0 0 1-96 96zm98.67-182.4a22.4 22.4 0 1 1 22.4-22.4 22.45 22.45 0 0 1-22.4 22.4z"/>
+        </svg>
+        @fonsecarss
+      </a>
+
+      <h3>WhatsApp</h3>
+  <a href="https://wa.me/5491168708725" target="_blank" class="wa-link">
+    📱 +54 9 11 6870 8725
+  </a>
+    </div>
+      <div class="footer-box">
+        <h3>Ubicación</h3>
+        <p>Av. Bernardo de Irigoyen 344<br>General Rodríguez, Buenos Aires</p>
+      </div>
+      <div class="footer-box map-box">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.873697704024!2d-58.953839624497!3d-34.68446637293456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc98d53df654dd%3A0x42ce2ee8b0da6d7a!2sAv.%20Bernardo%20de%20Irigoyen%20344%2C%20B1748CJD%20Gral.%20Rodr%C3%ADguez%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1700000000000"
+          width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+    <p class="copy">&copy; 2025 FONSECARSS. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="script.js"></script>
+  
+  <div id="vehiculo-modal" class="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financiamiento - FONSECARSS</title>
+  <link rel="stylesheet" href="fc-style.css">
+</head>
+
+<body>
+
+<!-- HEADER (el mismo que en la home) -->
+<header>
+  <nav class="navbar">
+    <img src="logo.png" alt="FONSECARSS Logo" class="logo" />
+    <div class="nav-links">
+        <a href="FonseCars.html">Inicio</a>
+      <a href="vehiculos.html">Vehículos</a>
+      <a href="financiamiento.html">Financiamiento</a>
+      <a href="Contacto.html">Contacto</a>
+    </div>
+  </nav>
+</header>
+
+<!-- SIMULADOR DE FINANCIAMIENTO -->
+<section class="financiamiento-container">
+  <h2>Simulá tu Financiamiento</h2>
+
+  <div class="sim-form">
+    <label>Monto del vehículo</label>
+    <input type="number" id="monto" placeholder="Ej: 10000000">
+
+    <label>Entrega inicial</label>
+    <input type="number" id="entrega" placeholder="Ej: 2000000">
+
+    <label>Tasa de interés anual (%)</label>
+    <input type="number" id="tasa" value="45">
+
+    <label>Cantidad de cuotas</label>
+    <select id="cuotas">
+      <option value="12">12 cuotas</option>
+      <option value="24">24 cuotas</option>
+      <option value="36">36 cuotas</option>
+      <option value="48">48 cuotas</option>
+      <option value="60">60 cuotas</option>
+    </select>
+
+    <button onclick="calcular()">Calcular</button>
+  </div>
+
+  <div id="resultado" class="resultado"></div>
+</section>
+
+<!-- FOOTER (el mismo que en la home) -->
+<footer class="footer">
+  <div class="footer-container">
+
+     <div class="footer-box">
+      <h3>Instagram</h3>
+      <a class="ig-link" href="https://instagram.com/fonsecarss" target="_blank">
+        <svg class="icon" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M349.33 69.33H162.67A93.42 93.42 0 0 0 69.33 162.67v186.66A93.42 93.42 0 0 0 162.67 442.67h186.66A93.42 93.42 0 0 0 442.67 349.33V162.67A93.42 93.42 0 0 0 349.33 69.33zm-93.33 277.34a96 96 0 1 1 96-96 96.11 96.11 0 0 1-96 96zm98.67-182.4a22.4 22.4 0 1 1 22.4-22.4 22.45 22.45 0 0 1-22.4 22.4z"/>
+        </svg>
+        @fonsecarss
+      </a>
+
+      <h3>WhatsApp</h3>
+  <a href="https://wa.me/5491168708725" target="_blank" class="wa-link">
+    📱 +54 9 11 6870 8725
+  </a>
+    </div>
+
+    <div class="footer-box">
+      <h3>Ubicación</h3>
+      <p>Av. Bernardo de Irigoyen 344<br>General Rodríguez, Buenos Aires</p>
+    </div>
+
+    <div class="footer-box map-box">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.873697704024!2d-58.953839624497!3d-34.68446637293456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc98d53df654dd%3A0x42ce2ee8b0da6d7a!2sAv.%20Bernardo%20de%20Irigoyen%20344%2C%20B1748CJD%20Gral.%20Rodr%C3%ADguez%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1700000000000"
+        width="100%" height="200"
+        class="map-dark"
+        loading="lazy">
+      </iframe>
+    </div>
+
+  </div>
+
+  <p class="copy">&copy; 2025 FONSECARSS. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+function calcular() {
+  const monto = parseFloat(document.getElementById("monto").value);
+  const entrega = parseFloat(document.getElementById("entrega").value);
+  const tasa = parseFloat(document.getElementById("tasa").value) / 100;
+  const cuotas = parseInt(document.getElementById("cuotas").value);
+
+  if (!monto || !cuotas || tasa < 0) {
+    return alert("Completa los campos correctamente.");
+  }
+
+  const montoFinanciar = monto - (entrega || 0);
+  const tasaMensual = tasa / 12;
+
+  // Fórmula de cuota francesa
+  const cuota = montoFinanciar *
+    (tasaMensual * Math.pow(1 + tasaMensual, cuotas)) /
+    (Math.pow(1 + tasaMensual, cuotas) - 1);
+
+  const total = cuota * cuotas;
+
+  const result = `
+    <strong>Monto a financiar:</strong> $${montoFinanciar.toLocaleString()}<br>
+    <strong>Cuota mensual:</strong> $${cuota.toFixed(0).toLocaleString()}<br>
+    <strong>Total a pagar:</strong> $${total.toFixed(0).toLocaleString()}<br>
+    <strong>Plazo:</strong> ${cuotas} meses
+  `;
+
+  const box = document.getElementById("resultado");
+  box.innerHTML = result;
+  box.style.display = "block";
+}
+</script>
+
+</body>
+</html>

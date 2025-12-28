@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – FONSECARSS</title>
+  <link rel="stylesheet" href="fc-style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: #111;
+      border: 2px solid #d4af37;
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 350px;
+      text-align: center;
+    }
+
+    .login-container h2 {
+      color: #d4af37;
+      margin-bottom: 25px;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #d4af37;
+      background-color: #000;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #d4af37;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background-color: #f0d76b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Login Admin</h2>
+    <form action="/login" method="POST">
+      <input type="text" name="usuario" placeholder="Usuario" required>
+      <input type="password" name="password" placeholder="Contraseña" required>
+      <button type="submit">Ingresar</button>
+    </form>
+  </div>
+
+</body>
+</html>
+

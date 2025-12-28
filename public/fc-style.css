@@ -1,0 +1,666 @@
+/* ----------------------- Reset y estilos generales ----------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000000;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* ----------------------- Header sticky y moderno ----------------------- */
+header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: #000000aa;
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid #d4af37;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 40px;
+  height: 70px;
+}
+
+.logo {
+  height: 70px;              
+  object-fit: contain;
+  cursor: pointer;
+
+  transform: scale(4.0);    
+  transform-origin: left center;
+
+  pointer-events: auto;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.35));
+}
+
+
+/* ----------------------- Navegación ----------------------- */
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  position: relative;
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 6px 12px;
+  transition: color 0.3s, transform 0.2s, box-shadow 0.3s;
+  border-radius: 8px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 10px rgba(212, 175, 55, 0.5),
+    0 0 20px rgba(212, 175, 55, 0.35);
+}
+
+/* Responsive nav */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+}
+
+/* ----------------------- Hero Section ----------------------- */
+.hero {
+  background: linear-gradient(to bottom, #111, #000);
+  padding: 100px 40px;
+}
+
+.hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+  gap: 40px;
+  flex-wrap: nowrap;
+}
+
+.hero-text {
+  flex: 1 1 50%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 1s forwards;
+}
+
+.hero-text h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #d4af37;
+}
+
+.hero-text p {
+  font-size: 22px;
+  line-height: 1.8;
+}
+
+/* Párrafo "somos" */
+.somos {
+  font-family: 'Georgia', serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #f0d76b;
+  margin-top: 20px;
+}
+
+.hero-image {
+  flex: 1 1 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image img {
+  max-width: 500px;
+  width: 100%;
+  border-radius: 20px;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive hero */
+@media (max-width: 768px) {
+  .hero-container {
+    flex-direction: column;
+    gap: 30px;
+    padding: 50px 20px;
+  }
+
+  .hero-text h1 {
+    font-size: 36px;
+  }
+
+  .hero-text p {
+    font-size: 18px;
+  }
+}
+
+/* ----------------------- Autos Section ----------------------- */
+.autos-section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.autos-section h2 {
+  color: #d4af37;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 0 40px;
+}
+
+.card {
+  background-color: #111;
+  border: 2px solid #d4af37;
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.8);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 18px;
+}
+
+.card h3 {
+  margin-top: 15px;
+  color: #d4af37;
+}
+
+/* ----------------------- Carrusel ----------------------- */
+.auto-carousel {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.auto-carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.4s ease;
+}
+
+.auto-carousel-track img {
+  min-width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.35);
+  border: none;
+  font-size: 24px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #fff;
+  border-radius: 50%;
+  transition: 0.2s ease;
+}
+
+.carousel-btn:hover {
+  background: rgba(0,0,0,0.55);
+}
+
+.carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-btn.next {
+  right: 10px;
+}
+
+.slide {
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.slide img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.slide-desc {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #d4af37;
+  text-align: center;
+  opacity: 0.9;
+}
+
+/* ----------------------- Financiamiento / Contacto ----------------------- */
+.simulador, .financiamiento-container {
+  max-width: 600px;
+  margin: auto;
+  background-color: #111;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 30px 25px;
+  margin-bottom: 40px;
+}
+
+/* Contacto: ocupa todo el ancho del body */
+.contact-section {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: #000; /* mantiene fondo negro */
+  color: #fff;
+  text-align: center;
+}
+
+.contact-section .contact-container {
+  max-width: 1200px; /* contenido centrado */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  background-color: #111;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 30px 25px;
+}
+
+.simulador label, .simulador input, .simulador select,
+.contacto-info p, .contact-section .contact-info p, .contact-section .contact-item,
+.sim-form label, .sim-form input, .sim-form select {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #f0d76b;
+}
+
+.simulador input, .simulador select, .sim-form input, .sim-form select {
+  background-color: #000;
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  padding: 8px;
+  color: #fff;
+}
+
+.simulador button, .sim-form button {
+  background-color: #d4af37;
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.simulador button:hover, .sim-form button:hover {
+  background-color: #f0d76b;
+}
+
+
+/* ----------------------- Footer Profesional Compacto ----------------------- */
+.footer {
+  background-color: #000000;
+  border-top: 3px solid #d4af37;
+  padding: 25px 20px;
+  margin-top: 40px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  text-align: center;
+}
+
+.footer-box h3 {
+  font-size: 20px;
+  color: #d4af37;
+  margin-bottom: 8px;
+}
+
+.footer-box p {
+  font-size: 15px;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  margin-right: 8px;
+  filter: brightness(0) saturate(100%) invert(83%) sepia(62%) saturate(904%) hue-rotate(8deg) brightness(96%) contrast(92%);
+}
+
+.ig-link {
+  font-size: 18px;
+  color: #d4af37;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.ig-link:hover {
+  color: #ffffff;
+}
+
+.map-box iframe, .contact-map-box iframe {
+  border-radius: 20px;
+  filter: invert(90%) grayscale(20%) contrast(85%);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
+  height: 140px;
+}
+
+.copy {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 13px;
+  color: #d4af37;
+  opacity: 0.8;
+}
+
+/* Contacto map grande */
+.contact-map-box iframe {
+  height: 350px;
+}
+
+/* Responsive general */
+@media (max-width: 768px) {
+  .cards {
+    padding: 0 20px;
+  }
+  
+  .simulador, .contacto-info, .financiamiento-container, .contact-section .contact-container {
+    padding: 20px 15px;
+  }
+}
+
+/* --- ADMIN PANEL --- */
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.logout-btn {
+  background-color: #d4af37;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  color: black;
+}
+
+.logout-btn:hover {
+  background-color: #f0d76b;
+}
+
+.top-actions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.vehiculo-card {
+  background-color: #111;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.vehiculo-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.7);
+}
+
+.vehiculo-card h3 {
+  margin-top: 12px;
+  color: #d4af37;
+}
+
+.precio {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.estado.Disponible {
+  color: #7CFC00;
+}
+
+.estado.En-tratamiento {
+  color: #FFD700;
+}
+
+.estado.Vendido {
+  color: #FF4C4C;
+}
+
+/* ================= PANEL ADMIN LAYOUT ================= */
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 40px;
+  max-width: 1300px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.admin-left,
+.admin-right {
+  background-color: #111;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+.admin-right {
+  align-self: flex-start;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= FILTROS VEHÍCULOS ================= */
+
+.filtros-vehiculos {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 35px;
+  flex-wrap: wrap;
+}
+
+.filtro {
+  background-color: #111;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filtro:hover {
+  background-color: #d4af37;
+  color: #000;
+}
+
+.filtro.activo {
+  background-color: #d4af37;
+  color: #000;
+}
+
+/* ==== TAMAÑO DE IMÁGENES EN VEHÍCULOS ==== */
+
+.vehiculo-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.vehiculo-card .carousel {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.vehiculo-card .carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.vehiculo-card .carousel img:first-child {
+  display: block;
+}
+
+.admin-form textarea {
+  background-color: #000;
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  padding: 8px;
+  color: #fff;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* ================= MODAL VEHÍCULO ================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  background-color: #111;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 25px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #d4af37;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* ================= MODAL IMÁGENES ================= */
+
+.modal-carousel {
+  width: 100%;
+  height: 350px;           /* altura fija del área de imagen */
+  overflow: hidden;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.modal-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      
+  display: block;
+}
+
+/* ================= WHATSAPP LINK ================= */
+
+.wa-link {
+  color: #d4af37; 
+  font-weight: bold;
+  font-size: 17px;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.wa-link:hover {
+  color: #1ebe5d;
+  transform: scale(1.05);
+}
+
+/* Espacio entre Instagram y título WhatsApp en el footer */
+.footer-box h3 {
+  margin-top: 10px;
+}
+
+.admin-item {
+  border-top: 1px solid rgba(212,175,55,0.3);
+  padding-top: 12px;
+  margin-top: 12px;
+}

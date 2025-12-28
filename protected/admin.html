@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin – FONSECARSS</title>
+  <link rel="stylesheet" href="/fc-style.css">
+</head>
+
+<body class="admin-body">
+
+<header>
+  <nav class="navbar">
+    <a><img src="logo.png" class="logo" alt="FONSECARSS Logo"></a>
+
+    <div class="nav-links">
+      <a href="vehiculos.html">Vehículos</a>
+    </div>
+
+    <!-- BOTÓN DE CERRAR SESIÓN -->
+    <div class="logout-container">
+      <a href="/logout" class="btn-logout">Cerrar sesión</a>
+    </div>
+  </nav>
+</header>
+
+<section class="admin-section">
+
+  <h2 class="admin-title">Panel de Administración</h2>
+
+  <div class="admin-layout">
+
+    <!-- ================= COLUMNA IZQUIERDA ================= -->
+    <div class="admin-left">
+
+      <h3 class="admin-subtitle">Agregar vehículo</h3>
+
+      <form class="admin-form" action="/api/vehiculo" method="POST" enctype="multipart/form-data">
+
+        <label>Marca</label>
+        <input type="text" name="marca" placeholder="Marca" required>
+
+        <label>Modelo</label>
+        <input type="text" name="modelo" placeholder="Modelo" required>
+
+        <label>Precio</label>
+        <input type="text" name="precio" placeholder="Precio" required>
+
+        <label>Categoría</label>
+        <select name="categoria" required>
+          <option value="">Seleccionar</option>
+          <option value="Usado">Usado</option>
+          <option value="0Km">0Km</option>
+          <option value="Utilitario">Utilitario</option>
+        </select>
+
+        <label>Imagen 1 (obligatoria)</label>
+        <input type="file" name="imagen1" accept="image/*" required>
+
+         <label>Imagen 2</label>
+         <input type="file" name="imagen2" accept="image/*">
+
+         <label>Imagen 3</label>
+         <input type="file" name="imagen3" accept="image/*">
+
+         <label>Ficha técnica</label>
+         <textarea name="ficha_tecnica" rows="5" placeholder="Ej: Motor 1.6 • Año 2020 • 80.000 km • Nafta • Manual">
+         </textarea>
+
+        <label>Estado</label>
+        <select name="estado">
+          <option value="Disponible">Disponible</option>
+          <option value="En tratamiento">En tratamiento</option>
+          <option value="Vendido">Vendido</option>
+        </select>
+
+        <button type="submit" class="btn-gold">Agregar Vehículo</button>
+      </form>
+
+      <h3 class="admin-subtitle">Vehículos cargados</h3>
+      <div id="admin-vehiculos" class="admin-list"></div>
+
+    </div>
+
+    <!-- ================= COLUMNA DERECHA ================= -->
+    <div class="admin-right" id="crear-admin-box">
+
+      <h3 class="admin-subtitle">Crear nuevo administrador</h3>
+
+      <div class="admin-right" id="admin-admins-box">
+
+  <h3 class="admin-subtitle">Administradores</h3>
+
+  <div id="admin-lista"></div>
+
+</div>
+
+<div class="admin-right">
+
+  <h3 class="admin-subtitle">Cambiar mi contraseña</h3>
+
+  <form class="admin-form" action="/api/admin/password" method="POST">
+    <input type="hidden" name="usuario" id="mi-usuario">
+
+    <label>Nueva contraseña</label>
+    <input type="password" name="password" required>
+
+    <button class="btn-gold">Actualizar</button>
+  </form>
+
+</div>
+
+
+      <form class="admin-form" action="/api/admin/crear" method="POST">
+        <label>Usuario</label>
+        <input type="text" name="usuario" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+
+        <button type="submit" class="btn-gold">Crear Admin</button>
+      </form>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+  <p class="copy">© 2025 FONSECARSS – Todos los derechos reservados.</p>
+</footer>
+
+<script src="/script.js"></script>
+</body>
+</html>
