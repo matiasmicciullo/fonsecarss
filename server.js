@@ -2,7 +2,7 @@ const multer = require("multer");
 
 // server.js
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
+const Database = require("better-sqlite3");   // 👈 CAMBIO
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const path = require("path");
@@ -27,7 +27,7 @@ app.use(session({
 
 
 // Base de datos
-const db = new sqlite3.Database("./database.sqlite");
+const db = new Database("database.sqlite");
 
 // ===== CONFIGURACIÓN MULTER (SUBIDA DE IMÁGENES) =====
 const storage = multer.diskStorage({
