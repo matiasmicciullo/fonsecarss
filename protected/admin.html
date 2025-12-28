@@ -11,17 +11,27 @@
 
 <header>
   <nav class="navbar">
-    <a><img src="logo.png" class="logo" alt="FONSECARSS Logo"></a>
+  <a href="FonseCars.html">
+    <img src="logo.png" class="logo" alt="FONSECARSS Logo">
+  </a>
 
-    <div class="nav-links">
-      <a href="vehiculos.html">Vehículos</a>
-    </div>
+  <button class="hamburger" id="hamburger">☰</button>
 
-    <!-- BOTÓN DE CERRAR SESIÓN -->
-    <div class="logout-container">
-      <a href="/logout" class="btn-logout">Cerrar sesión</a>
-    </div>
-  </nav>
+  <div class="nav-links" id="nav-links">
+    <a href="FonseCars.html">Inicio</a>
+    <a href="vehiculos.html">Vehículos</a>
+    <a href="Financiamiento.html">Financiamiento</a>
+    <a href="Contacto.html">Contacto</a>
+
+    <!-- SOLO ADMINS -->
+    <a href="/admin.html" id="nav-panel" style="display:none;">Panel</a>
+  </div>
+
+ <div class="logout-container" id="nav-logout" style="display:none;">
+  <a href="/logout" class="btn-logout">Cerrar sesión</a>
+</div>
+
+</nav>
 </header>
 
 <section class="admin-section">
@@ -87,30 +97,6 @@
 
       <h3 class="admin-subtitle">Crear nuevo administrador</h3>
 
-      <div class="admin-right" id="admin-admins-box">
-
-  <h3 class="admin-subtitle">Administradores</h3>
-
-  <div id="admin-lista"></div>
-
-</div>
-
-<div class="admin-right">
-
-  <h3 class="admin-subtitle">Cambiar mi contraseña</h3>
-
-  <form class="admin-form" action="/api/admin/password" method="POST">
-    <input type="hidden" name="usuario" id="mi-usuario">
-
-    <label>Nueva contraseña</label>
-    <input type="password" name="password" required>
-
-    <button class="btn-gold">Actualizar</button>
-  </form>
-
-</div>
-
-
       <form class="admin-form" action="/api/admin/crear" method="POST">
         <label>Usuario</label>
         <input type="text" name="usuario" required>
@@ -121,9 +107,37 @@
         <button type="submit" class="btn-gold">Crear Admin</button>
       </form>
 
-    </div>
 
-  </div>
+      <div class="admin-right" id="admin-admins-box">
+
+  <h3 class="admin-subtitle">Administradores</h3>
+
+  <div id="admin-lista"></div>
+
+</div>
+
+ <div class="admin-right">
+
+  <h3 class="admin-subtitle">Cambiar mi contraseña</h3>
+
+  <form class="admin-form" id="form-password">
+  <input type="hidden" name="usuario" id="mi-usuario">
+
+  <label>Contraseña actual</label>
+  <input type="password" name="passwordActual" required>
+
+  <label>Nueva contraseña</label>
+  <input type="password" name="passwordNueva" required>
+
+  <button class="btn-gold">Actualizar</button>
+
+  <p id="password-error" style="color:#ff4c4c; display:none;"></p>
+</form>
+
+   </div>
+
+    </div>
+       </div>
 
 </section>
 

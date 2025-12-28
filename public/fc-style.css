@@ -211,6 +211,7 @@ header {
   height: 180px;
   overflow: hidden;
   border-radius: 14px;
+  cursor: pointer;
 }
 
 .auto-carousel-track {
@@ -511,6 +512,7 @@ header {
 
 .admin-right {
   align-self: flex-start;
+  margin-top: 20px;
 }
 
 /* Responsive */
@@ -663,4 +665,161 @@ header {
   border-top: 1px solid rgba(212,175,55,0.3);
   padding-top: 12px;
   margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    height: auto;
+    padding: 15px 20px;
+  }
+
+  .logo {
+    height: 60px;
+    margin-bottom: 10px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .nav-links a {
+    font-size: 16px;
+    padding: 6px 10px;
+  }
+
+  .logout-container {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 60px 20px;
+  }
+
+  .hero-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+
+  .hero-image img {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .cards {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+
+  .vehiculo-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-btn {
+    font-size: 20px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-carousel img {
+    max-height: 220px;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-form,
+  .sim-form,
+  .login-container {
+    width: 100%;
+    max-width: 95%;
+    margin: auto;
+  }
+
+  input,
+  select,
+  button {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .footer-box {
+    text-align: center;
+  }
+}
+
+/* ----------------------- HAMBURGER MENU ----------------------- */
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #d4af37;
+  cursor: pointer;
+  z-index: 2000; /* 🔑 más alto que el logo */
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .navbar {
+    justify-content: space-between;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .logo {
+    height: 55px;
+    pointer-events: auto;
+  }
+
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
 }

@@ -7,6 +7,8 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const path = require("path");
 
+const loginAttempts = {};
+
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -128,18 +130,44 @@ app.get("/logout", (req, res) => {
 // Login
 app.post("/login", (req, res) => {
   const { usuario, password } = req.body;
+  const ip = req.ip;
+  const key = `${ip}_${usuario}`;
+
+  // Inicializar intento si no existe
+  if (!loginAttempts[key]) {
+    loginAttempts[key] = { count: 0, blocked: false };
+  }
+
+  // Bloqueado SOLO ese usuario
+  if (loginAttempts[key].blocked) {
+    return res
+      .status(429)
+      .json({ error: "Demasiados intentos fallidos. Acceso bloqueado." });
+  }
 
   db.get("SELECT * FROM admin WHERE usuario = ?", [usuario], (err, row) => {
-    if (!row) return res.send("Usuario incorrecto");
+    if (!row) {
+      registrarFallo(ip, usuario);
+      return res.status(401).json({ error: "Usuario incorrecto" });
+    }
 
     bcrypt.compare(password, row.password, (err, same) => {
-      if (!same) return res.send("Contraseña incorrecta");
+      if (!same) {
+        registrarFallo(ip, usuario);
+        return res.status(401).json({ error: "Contraseña incorrecta" });
+      }
+
+      // ✅ Login correcto → resetear SOLO ese usuario
+      loginAttempts[key] = { count: 0, blocked: false };
 
       req.session.usuario = usuario;
-      res.redirect("/admin.html"); 
+      res.json({ ok: true });
     });
   });
 });
+
+
+
 
 // Panel admin
 app.get("/admin.html", auth, (req, res) => {
@@ -236,30 +264,65 @@ app.post("/api/admin/eliminar", auth, (req, res) => {
 
 // Cambiar password de admin
 app.post("/api/admin/password", auth, (req, res) => {
-  const { usuario, password } = req.body;
+  const { usuario, passwordActual, passwordNueva } = req.body;
 
-  if (!usuario || !password) {
-    return res.status(400).send("Datos incompletos");
+  if (!usuario || !passwordNueva) {
+    return res.status(400).json({ error: "Datos incompletos" });
   }
 
-  // Solo Fonsecars puede cambiar password de otros
-  if (
-    req.session.usuario !== "Fonsecars" &&
-    req.session.usuario !== usuario
-  ) {
-    return res.status(403).send("No autorizado");
+  // Permisos
+  const esFonsecars = req.session.usuario === "Fonsecars";
+  const esPropio = req.session.usuario === usuario;
+
+  if (!esFonsecars && !esPropio) {
+    return res.status(403).json({ error: "No autorizado" });
   }
 
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) return res.status(500).send("Error interno");
+  // Obtener admin objetivo
+  db.get(
+    "SELECT * FROM admin WHERE usuario = ?",
+    [usuario],
+    (err, row) => {
+      if (!row) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+
+      // Si NO es Fonsecars, validar password actual
+      if (!esFonsecars) {
+        if (!passwordActual) {
+          return res.status(400).json({ error: "Debes ingresar tu contraseña actual" });
+        }
+
+        bcrypt.compare(passwordActual, row.password, (err, same) => {
+          if (!same) {
+            return res.status(401).json({ error: "Contraseña actual incorrecta" });
+          }
+
+          actualizarPassword(row.usuario, passwordNueva, res);
+        });
+      } else {
+        // Fonsecars puede cambiar sin validar password actual
+        actualizarPassword(row.usuario, passwordNueva, res);
+      }
+    }
+  );
+});
+
+// Función auxiliar
+function actualizarPassword(usuario, nuevaPassword, res) {
+  bcrypt.hash(nuevaPassword, 10, (err, hash) => {
+    if (err) {
+      return res.status(500).json({ error: "Error interno" });
+    }
 
     db.run(
       "UPDATE admin SET password = ? WHERE usuario = ?",
       [hash, usuario],
-      () => res.redirect("/admin.html")
+      () => res.json({ ok: true })
     );
   });
-});
+}
+
 
 // Eliminar vehículo
 app.post("/api/vehiculo/eliminar", auth, (req, res) => {
@@ -269,6 +332,22 @@ app.post("/api/vehiculo/eliminar", auth, (req, res) => {
     res.redirect("/admin.html");
   });
 });
+
+function registrarFallo(ip, usuario) {
+  const key = `${ip}_${usuario}`;
+
+  if (!loginAttempts[key]) {
+    loginAttempts[key] = { count: 0, blocked: false };
+  }
+
+  loginAttempts[key].count++;
+
+  if (loginAttempts[key].count >= 5) {
+    loginAttempts[key].blocked = true;
+  }
+}
+
+
 
 // Iniciar servidor
 app.listen(3000, () => console.log("Servidor iniciado en http://localhost:3000"));

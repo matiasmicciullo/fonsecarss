@@ -67,7 +67,41 @@
       <input type="password" name="password" placeholder="Contraseña" required>
       <button type="submit">Ingresar</button>
     </form>
+    <p id="login-error" style="color:#ff4c4c; margin-top:15px; display:none;"></p>
   </div>
+
+  <script>
+  const form = document.querySelector("form");
+  const errorBox = document.getElementById("login-error");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    errorBox.style.display = "none";
+
+    const formData = new FormData(form);
+
+   const res = await fetch("/login", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  body: new URLSearchParams(formData)
+  });
+
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      errorBox.textContent = data.error;
+      errorBox.style.display = "block";
+      return;
+    }
+
+    // Login correcto → ir al panel
+    window.location.href = "/admin.html";
+  });
+</script>
 
 </body>
 </html>

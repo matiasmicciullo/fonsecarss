@@ -8,18 +8,29 @@
 </head>
 
 <body>
-
-<!-- HEADER (el mismo que en la home) -->
 <header>
-  <nav class="navbar">
-    <img src="logo.png" alt="FONSECARSS Logo" class="logo" />
-    <div class="nav-links">
-        <a href="FonseCars.html">Inicio</a>
-      <a href="vehiculos.html">Vehículos</a>
-      <a href="financiamiento.html">Financiamiento</a>
-      <a href="Contacto.html">Contacto</a>
-    </div>
-  </nav>
+   <nav class="navbar">
+  <a href="FonseCars.html">
+    <img src="logo.png" class="logo" alt="FONSECARSS Logo">
+  </a>
+
+  <button class="hamburger" id="hamburger">☰</button>
+
+  <div class="nav-links" id="nav-links">
+    <a href="FonseCars.html">Inicio</a>
+    <a href="vehiculos.html">Vehículos</a>
+    <a href="Financiamiento.html">Financiamiento</a>
+    <a href="Contacto.html">Contacto</a>
+
+    <!-- SOLO ADMINS -->
+    <a href="/admin.html" id="nav-panel" style="display:none;">Panel</a>
+  </div>
+
+  <div class="logout-container" id="nav-logout" style="display:none;">
+  <a href="/logout" class="btn-logout">Cerrar sesión</a>
+</div>
+
+</nav>
 </header>
 
 <!-- SIMULADOR DE FINANCIAMIENTO -->
@@ -122,6 +133,6 @@ function calcular() {
   box.style.display = "block";
 }
 </script>
-
+<script src="script.js"></script>
 </body>
 </html>

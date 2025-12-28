@@ -178,16 +178,25 @@ function initHomeCarousel(carousel) {
 
   update();
 
-  next.onclick = () => {
+  // Flechas: solo mueven el carrusel
+  next.onclick = (e) => {
+    e.stopPropagation(); // ⛔ no redirige
     index = (index + 1) % slides.length;
     update();
   };
 
-  prev.onclick = () => {
+  prev.onclick = (e) => {
+    e.stopPropagation(); // ⛔ no redirige
     index = (index - 1 + slides.length) % slides.length;
     update();
   };
+
+  // Click en el carrusel → ir a vehículos
+  carousel.addEventListener("click", () => {
+    window.location.href = "vehiculos.html";
+  });
 }
+
 
 const crearAdminBox = document.getElementById("crear-admin-box");
 
@@ -305,3 +314,85 @@ fetch("/api/session")
       `).join("");
     });
 }
+
+// ----------------------- NAV PANEL (solo admins) -----------------------
+fetch("/api/session")
+  .then(res => res.json())
+  .then(data => {
+    // Mostrar link Panel solo a admins
+    const panelLink = document.getElementById("nav-panel");
+    if (panelLink && data.usuario) {
+      panelLink.style.display = "inline-block";
+    }
+
+    // Mostrar Cerrar sesión solo si hay sesión
+    const logout = document.getElementById("nav-logout");
+    if (logout && data.usuario) {
+      logout.style.display = "block";
+    }
+  })
+  .catch(() => {
+    // No hay sesión → todo sigue oculto
+  });
+
+// ----------------------- CAMBIAR PASSWORD -----------------------
+const formPassword = document.getElementById("form-password");
+
+if (formPassword) {
+  formPassword.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const errorBox = document.getElementById("password-error");
+    errorBox.style.display = "none";
+
+    const formData = new FormData(formPassword);
+
+    const res = await fetch("/api/admin/password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams(formData)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      errorBox.textContent = data.error;
+      errorBox.style.display = "block";
+      return;
+    }
+
+    alert("Contraseña actualizada correctamente");
+    formPassword.reset();
+  });
+}
+
+// ----------------------- HAMBURGER MENU -----------------------
+// ----------------------- HAMBURGER MENU -----------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("nav-links");
+
+  if (!hamburger || !navLinks) return;
+
+  hamburger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    navLinks.classList.toggle("open");
+  });
+
+  // Cerrar menú al tocar un link
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+    });
+  });
+});
+
+
+document.querySelectorAll("#nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("open");
+  });
+});
+
