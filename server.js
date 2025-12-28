@@ -350,8 +350,8 @@ function registrarFallo(ip, usuario) {
 
 
 // Iniciar servidor
-app.listen(3000, () => console.log("Servidor iniciado en http://localhost:3000"));
+const PORT = process.env.PORT || 3000;
 
-app.get("/api/session", auth, (req, res) => {
-  res.json({ usuario: req.session.usuario });
+app.listen(PORT, () => {
+  console.log(`Servidor iniciado en puerto ${PORT}`);
 });
