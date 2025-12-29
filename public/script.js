@@ -23,7 +23,7 @@ function renderVehiculos(vehiculos) {
   if (!grid) return;
 
   grid.innerHTML = vehiculos.map(v => `
-    <div class="vehiculo-card" onclick='abrirModal(${JSON.stringify(v)})'>
+    <div class="vehiculo-card" data-id="${v.id}">
       <div class="carousel" data-index="0">
   <div class="carousel-track">
     <img src="${v.imagen1}" alt="${v.marca} ${v.modelo}">
@@ -39,6 +39,16 @@ function renderVehiculos(vehiculos) {
   `).join("");
 
   initCarruseles();
+
+  // Click en card → abrir modal
+document.querySelectorAll(".vehiculo-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const id = card.dataset.id;
+    const vehiculo = vehiculosCache.find(v => v.id == id);
+    if (vehiculo) abrirModal(vehiculo);
+  });
+});
+
 }
 
 // ----------------------- ADMIN -----------------------
@@ -117,15 +127,6 @@ function initCarruseles() {
       update();
     };
   });
-}
-
-
-prev.onclick = (e) => {
-  e.stopPropagation(); // ⛔ evita abrir el modal
-  index = (index - 1 + slides.length) % slides.length;
-  show(index);
-};
-});
 }
 
 // ----------------------- HOME CARRUSELES -----------------------
