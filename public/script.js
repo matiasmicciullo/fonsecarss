@@ -24,11 +24,13 @@ function renderVehiculos(vehiculos) {
 
   grid.innerHTML = vehiculos.map(v => `
     <div class="vehiculo-card" onclick='abrirModal(${JSON.stringify(v)})'>
-      <div class="carousel">
-        <img src="${v.imagen1}" alt="${v.marca} ${v.modelo}">
-        ${v.imagen2 ? `<img src="${v.imagen2}" alt="${v.marca} ${v.modelo}">` : ""}
-        ${v.imagen3 ? `<img src="${v.imagen3}" alt="${v.marca} ${v.modelo}">` : ""}
-      </div>
+      <div class="carousel" data-index="0">
+  <div class="carousel-track">
+    <img src="${v.imagen1}" alt="${v.marca} ${v.modelo}">
+    ${v.imagen2 ? `<img src="${v.imagen2}" alt="${v.marca} ${v.modelo}">` : ""}
+    ${v.imagen3 ? `<img src="${v.imagen3}" alt="${v.marca} ${v.modelo}">` : ""}
+  </div>
+</div>
 
       <h3>${v.marca} ${v.modelo}</h3>
       <p class="precio">${v.precio}</p>
@@ -81,7 +83,8 @@ function renderAdminList(lista) {
 // ----------------------- CARRUSELES -----------------------
 function initCarruseles() {
   document.querySelectorAll(".carousel").forEach(carousel => {
-    const slides = carousel.querySelectorAll("img");
+    const track = carousel.querySelector(".carousel-track");
+    const slides = track.querySelectorAll("img");
     let index = 0;
 
     if (slides.length <= 1) return;
@@ -96,19 +99,26 @@ function initCarruseles() {
 
     carousel.append(prev, next);
 
-    function show(i) {
-      slides.forEach((img, idx) => {
-        img.style.display = idx === i ? "block" : "none";
-      });
+    function update() {
+      track.style.transform = `translateX(-${index * 100}%)`;
     }
 
-    show(index);
+    update();
 
     next.onclick = (e) => {
-  e.stopPropagation(); // ⛔ evita abrir el modal
-  index = (index + 1) % slides.length;
-  show(index);
-};
+      e.stopPropagation();
+      index = (index + 1) % slides.length;
+      update();
+    };
+
+    prev.onclick = (e) => {
+      e.stopPropagation();
+      index = (index - 1 + slides.length) % slides.length;
+      update();
+    };
+  });
+}
+
 
 prev.onclick = (e) => {
   e.stopPropagation(); // ⛔ evita abrir el modal
