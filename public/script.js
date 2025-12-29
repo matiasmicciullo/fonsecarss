@@ -204,9 +204,9 @@ if (crearAdminBox) {
   fetch("/api/session")
     .then(res => res.json())
     .then(data => {
-      if (data.usuario !== "Fonsecars") {
-        crearAdminBox.style.display = "none";
-      }
+      if (!data.isSuperAdmin) {
+  crearAdminBox.style.display = "none";
+}
     })
     .catch(() => {
       crearAdminBox.style.display = "none";

@@ -128,6 +128,18 @@ function registrarFallo(key) {
   }
 }
 
+// -------------------- SESSION INFO --------------------
+app.get("/api/session", (req, res) => {
+  if (!req.session.usuario) {
+    return res.json({});
+  }
+
+  res.json({
+    usuario: req.session.usuario,
+    isSuperAdmin: req.session.usuario === "Fonsecars"
+  });
+});
+
 // -------------------- LOGOUT --------------------
 app.get("/logout", (req, res) => {
   req.session.destroy(() => res.redirect("/login.html"));
