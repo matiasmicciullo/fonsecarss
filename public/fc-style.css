@@ -680,7 +680,6 @@ header {
   cursor: pointer;
 }
 
-/* ================= MODAL IMÁGENES ================= */
 
 /* ================= MODAL IMÁGENES (CAROUSEL REAL) ================= */
 
@@ -711,6 +710,44 @@ header {
   scroll-snap-align: center;
   display: block;
 }
+
+/* Flechas carrusel modal */
+
+.modal-carousel {
+  position: relative;
+}
+
+.modal-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.modal-carousel-btn.prev {
+  left: 12px;
+}
+
+.modal-carousel-btn.next {
+  right: 12px;
+}
+
+@media (max-width: 768px) {
+  .modal-carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+}
+
 
 /* ================= WHATSAPP LINK ================= */
 

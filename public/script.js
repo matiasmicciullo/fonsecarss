@@ -253,21 +253,27 @@ function abrirModal(v) {
   const imagenes = [v.imagen1, v.imagen2, v.imagen3].filter(Boolean);
 
   content.innerHTML = `
-    <div class="carousel">
-      <div class="carousel-track">
-        ${imagenes.map(img => `<img src="${img}" alt="">`).join("")}
-      </div>
+  <div class="modal-carousel">
+    <button class="modal-carousel-btn prev">‹</button>
+
+    <div class="modal-carousel-track">
+      ${imagenes.map(img => `<img src="${img}" alt="">`).join("")}
     </div>
 
-    <h2>${v.marca} ${v.modelo}</h2>
-    <p class="precio">${v.precio}</p>
-    <p class="estado">${v.estado}</p>
+    <button class="modal-carousel-btn next">›</button>
+  </div>
 
-    <h3>Ficha técnica</h3>
-    <p>${v.ficha_tecnica || "Sin información adicional."}</p>
-  `;
+  <h2>${v.marca} ${v.modelo}</h2>
+  <p class="precio">${v.precio}</p>
+  <p class="estado">${v.estado}</p>
+
+  <h3>Ficha técnica</h3>
+  <p>${v.ficha_tecnica || "Sin información adicional."}</p>
+`;
+
 
   modal.style.display = "flex";
+  initModalCarousel();
 }
 
 
@@ -280,6 +286,36 @@ document.addEventListener("click", e => {
     modal.style.display = "none";
   }
 });
+
+function initModalCarousel() {
+  const carousel = document.querySelector(".modal-carousel");
+  if (!carousel) return;
+
+  const track = carousel.querySelector(".modal-carousel-track");
+  const slides = track.querySelectorAll("img");
+  const prev = carousel.querySelector(".prev");
+  const next = carousel.querySelector(".next");
+
+  let index = 0;
+
+  function update() {
+    track.scrollTo({
+      left: index * carousel.clientWidth,
+      behavior: "smooth"
+    });
+  }
+
+  next.onclick = () => {
+    index = (index + 1) % slides.length;
+    update();
+  };
+
+  prev.onclick = () => {
+    index = (index - 1 + slides.length) % slides.length;
+    update();
+  };
+}
+
 
 // ----------------------- SESSION / ADMINS -----------------------
 fetch("/api/session")
@@ -358,12 +394,6 @@ fetch("/api/session")
 }
 
 function eliminarAdmin(usuario) {
-  if (!confirm(`¿Eliminar administrador ${usuario}?`)) return;
-
-  const btn = document.querySelector(
-    `.btn-eliminar[data-usuario="${usuario}"]`
-  );
-  if (btn) btn.disabled = true;
 
   fetch("/api/admin/eliminar", {
     method: "POST",
@@ -376,17 +406,13 @@ function eliminarAdmin(usuario) {
       const data = await res.json();
       if (!res.ok) throw data.error;
 
-      mostrarMensaje("Administrador eliminado correctamente", "success");
-      cargarAdmins();
+      // 🔁 refrescar página completa
+      location.reload();
     })
     .catch(err => {
       mostrarMensaje(err || "No se pudo eliminar el administrador", "error");
-    })
-    .finally(() => {
-      if (btn) btn.disabled = false;
     });
 }
-
 
 // ----------------------- NAV PANEL (solo admins) -----------------------
 fetch("/api/session")
@@ -408,7 +434,8 @@ fetch("/api/session")
     // No hay sesión → todo sigue oculto
   });
 
-// ----------------------- CAMBIAR PASSWORD -----------------------
+// ----------------------- CAMBIAR PASSWORD (SUPERADMIN) -----------------------
+
 const formPassword = document.getElementById("form-password");
 
 if (formPassword) {
@@ -417,54 +444,57 @@ if (formPassword) {
 
     const errorBox = document.getElementById("password-error");
     errorBox.style.display = "none";
+    errorBox.textContent = "";
 
-    const formData = new FormData(formPassword);
+    const usuario = document.getElementById("mi-usuario").value;
+    const passwordActualInput = formPassword.querySelector(
+      'input[name="passwordActual"]'
+    );
+    const passwordNuevaInput = formPassword.querySelector(
+      'input[name="passwordNueva"]'
+    );
 
-    const res = await fetch("/api/admin/password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: new URLSearchParams(formData)
-    });
+    const passwordActual = passwordActualInput
+      ? passwordActualInput.value
+      : null;
 
-    const data = await res.json();
+    const passwordNueva = passwordNuevaInput.value;
 
-    if (!res.ok) {
-      errorBox.textContent = data.error;
+    if (!passwordNueva || !passwordNueva.trim()) {
+      errorBox.textContent = "La nueva contraseña no puede estar vacía";
       errorBox.style.display = "block";
       return;
     }
 
-    alert("Contraseña actualizada correctamente");
-    formPassword.reset();
+    try {
+      const res = await fetch("/api/admin/password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+          usuario,
+          password: passwordNueva,
+          passwordActual
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw data.error;
+      }
+
+      alert("Contraseña actualizada correctamente");
+      formPassword.reset();
+    } catch (err) {
+      errorBox.textContent =
+        err || "No se pudo actualizar la contraseña";
+      errorBox.style.display = "block";
+    }
   });
 }
 
-function cambiarPassword(usuario, password) {
-  if (!password || !password.trim()) {
-    mostrarMensaje("La contraseña no puede estar vacía", "error");
-    return;
-  }
-
-  fetch("/api/admin/password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: new URLSearchParams({ usuario, password })
-  })
-    .then(async res => {
-      const data = await res.json();
-      if (!res.ok) throw data.error;
-
-      mostrarMensaje("Contraseña actualizada correctamente", "success");
-      cargarAdmins();
-    })
-    .catch(err => {
-      mostrarMensaje(err || "Error al actualizar contraseña", "error");
-    });
-}
 
 
 // ----------------------- HAMBURGER MENU -----------------------
@@ -489,11 +519,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+const navLinks = document.getElementById("nav-links");
+
 document.querySelectorAll("#nav-links a").forEach(link => {
   link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
+    if (navLinks) navLinks.classList.remove("open");
   });
 });
+
 
 document.addEventListener("click", e => {
 

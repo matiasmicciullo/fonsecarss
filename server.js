@@ -266,31 +266,56 @@ app.post("/api/admin/eliminar", auth, (req, res) => {
 
 // -------------------- CAMBIAR PASSWORD DE ADMIN --------------------
 app.post("/api/admin/password", auth, (req, res) => {
-  if (req.session.usuario !== "Fonsecars") {
-    return res.status(403).json({ error: "No autorizado" });
-  }
-
-  const { usuario, password } = req.body;
+  const usuarioSesion = req.session.usuario;
+  const { usuario, password, passwordActual } = req.body;
 
   if (!usuario || !password) {
     return res.status(400).json({ error: "Datos incompletos" });
   }
 
-  if (usuario === "Fonsecars") {
-    return res.status(400).json({
-      error: "No se puede cambiar la contraseña del super administrador"
+  // Obtener admin objetivo
+  const admin = db
+    .prepare("SELECT * FROM admin WHERE usuario = ?")
+    .get(usuario);
+
+  if (!admin) {
+    return res.status(404).json({ error: "Administrador no encontrado" });
+  }
+
+  // 🔒 SOLO superadmin puede cambiar contraseñas
+  if (usuarioSesion !== "Fonsecars") {
+    return res.status(403).json({
+      error: "Solo el super administrador puede cambiar contraseñas"
     });
   }
 
+  // 🔐 Caso 1: superadmin cambia SU PROPIA contraseña
+  if (usuario === "Fonsecars") {
+
+    if (!passwordActual) {
+      return res.status(400).json({
+        error: "Debe ingresar la contraseña actual"
+      });
+    }
+
+    const ok = bcrypt.compareSync(passwordActual, admin.password);
+
+    if (!ok) {
+      return res.status(401).json({
+        error: "La contraseña actual es incorrecta"
+      });
+    }
+  }
+
+  // 🔑 Actualizar contraseña
   const hash = bcrypt.hashSync(password, 10);
 
-  db.prepare("UPDATE admin SET password = ? WHERE usuario = ?")
-    .run(hash, usuario);
+  db.prepare(
+    "UPDATE admin SET password = ? WHERE usuario = ?"
+  ).run(hash, usuario);
 
   res.json({ ok: true });
 });
-
-
 
 
 // -------------------- SERVER --------------------
