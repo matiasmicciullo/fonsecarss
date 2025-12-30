@@ -682,18 +682,33 @@ header {
 
 /* ================= MODAL IMÁGENES ================= */
 
+/* ================= MODAL IMÁGENES (CAROUSEL REAL) ================= */
+
 .modal-carousel {
   width: 100%;
-  height: 350px;           /* altura fija del área de imagen */
+  height: 350px;
   overflow: hidden;
   border-radius: 16px;
   margin-bottom: 20px;
 }
 
-.modal-carousel img {
-  width: 100%;
+.modal-carousel-track {
+  display: flex;
   height: 100%;
-  object-fit: cover;      
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-carousel-track img {
+  min-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scroll-snap-align: center;
   display: block;
 }
 

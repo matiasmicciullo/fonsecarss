@@ -250,11 +250,13 @@ function abrirModal(v) {
   const modal = document.getElementById("vehiculo-modal");
   const content = document.getElementById("modal-content");
 
+  const imagenes = [v.imagen1, v.imagen2, v.imagen3].filter(Boolean);
+
   content.innerHTML = `
-    <div class="modal-carousel">
-      <img src="${v.imagen1}">
-      ${v.imagen2 ? `<img src="${v.imagen2}">` : ""}
-      ${v.imagen3 ? `<img src="${v.imagen3}">` : ""}
+    <div class="carousel">
+      <div class="carousel-track">
+        ${imagenes.map(img => `<img src="${img}" alt="">`).join("")}
+      </div>
     </div>
 
     <h2>${v.marca} ${v.modelo}</h2>
@@ -267,6 +269,7 @@ function abrirModal(v) {
 
   modal.style.display = "flex";
 }
+
 
 document.addEventListener("click", e => {
   const modal = document.getElementById("vehiculo-modal");
