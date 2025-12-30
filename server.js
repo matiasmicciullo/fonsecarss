@@ -233,6 +233,20 @@ app.post("/api/admin/crear", auth, (req, res) => {
   }
 });
 
+// -------------------- LISTAR ADMINS --------------------
+app.get("/api/admins", auth, (req, res) => {
+  if (req.session.usuario !== "Fonsecars") {
+    return res.status(403).json({ error: "No autorizado" });
+  }
+
+  const admins = db
+    .prepare("SELECT usuario FROM admin")
+    .all();
+
+  res.json(admins);
+});
+
+
 app.post("/api/admin/eliminar", auth, (req, res) => {
   if (req.session.usuario !== "Fonsecars") {
     return res.status(403).send("No autorizado");
