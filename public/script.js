@@ -325,13 +325,23 @@ fetch("/api/session")
               <input
                 type="password"
                 placeholder="Nueva contraseña"
-                id="pass-${a.usuario}"
+                class="admin-pass"
+                data-usuario="${a.usuario}"
               >
-              <button onclick="cambiarPassword('${a.usuario}')">
+
+              <button
+                type="button"
+                class="btn-password"
+                data-usuario="${a.usuario}"
+              >
                 Actualizar
               </button>
 
-              <button onclick="eliminarAdmin('${a.usuario}')">
+              <button
+                type="button"
+                class="btn-eliminar"
+                data-usuario="${a.usuario}"
+              >
                 Eliminar
               </button>
             </div>
@@ -341,6 +351,36 @@ fetch("/api/session")
     })
     .catch(() => {
       mostrarMensaje("Error cargando administradores", "error");
+    });
+}
+
+function eliminarAdmin(usuario) {
+  if (!confirm(`¿Eliminar administrador ${usuario}?`)) return;
+
+  const btn = document.querySelector(
+    `.btn-eliminar[data-usuario="${usuario}"]`
+  );
+  if (btn) btn.disabled = true;
+
+  fetch("/api/admin/eliminar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({ usuario })
+  })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw data.error;
+
+      mostrarMensaje("Administrador eliminado correctamente", "success");
+      cargarAdmins();
+    })
+    .catch(err => {
+      mostrarMensaje(err || "No se pudo eliminar el administrador", "error");
+    })
+    .finally(() => {
+      if (btn) btn.disabled = false;
     });
 }
 
@@ -398,6 +438,32 @@ if (formPassword) {
   });
 }
 
+function cambiarPassword(usuario, password) {
+  if (!password || !password.trim()) {
+    mostrarMensaje("La contraseña no puede estar vacía", "error");
+    return;
+  }
+
+  fetch("/api/admin/password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({ usuario, password })
+  })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw data.error;
+
+      mostrarMensaje("Contraseña actualizada correctamente", "success");
+      cargarAdmins();
+    })
+    .catch(err => {
+      mostrarMensaje(err || "Error al actualizar contraseña", "error");
+    });
+}
+
+
 // ----------------------- HAMBURGER MENU -----------------------
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -424,5 +490,33 @@ document.querySelectorAll("#nav-links a").forEach(link => {
   link.addEventListener("click", () => {
     navLinks.classList.remove("open");
   });
+});
+
+document.addEventListener("click", e => {
+
+  // BOTÓN: Eliminar admin
+  if (e.target.classList.contains("btn-eliminar")) {
+    const usuario = e.target.dataset.usuario;
+    eliminarAdmin(usuario);
+    return;
+  }
+
+  // BOTÓN: Cambiar password de admin
+  if (e.target.classList.contains("btn-password")) {
+    const usuario = e.target.dataset.usuario;
+
+    const input = document.querySelector(
+      `.admin-pass[data-usuario="${usuario}"]`
+    );
+
+    if (!input) {
+      mostrarMensaje("No se encontró el campo de contraseña", "error");
+      return;
+    }
+
+    cambiarPassword(usuario, input.value);
+    return;
+  }
+
 });
 
