@@ -307,24 +307,43 @@ fetch("/api/session")
       const cont = document.getElementById("admin-lista");
       if (!cont) return;
 
-      cont.innerHTML = admins.map(a => `
-        <div class="admin-item">
-          <strong>${a.usuario}</strong>
+      cont.innerHTML = admins.map(a => {
+        // Superadmin: se muestra sin acciones
+        if (a.usuario === "Fonsecars") {
+          return `
+            <div class="admin-item superadmin">
+              <strong>${a.usuario} (Super Admin)</strong>
+            </div>
+          `;
+        }
 
-          <form action="/api/admin/password" method="POST">
-            <input type="hidden" name="usuario" value="${a.usuario}">
-            <input type="password" name="password" placeholder="Nueva contraseña" required>
-            <button>Actualizar</button>
-          </form>
+        return `
+          <div class="admin-item">
+            <strong>${a.usuario}</strong>
 
-          <form action="/api/admin/eliminar" method="POST">
-            <input type="hidden" name="usuario" value="${a.usuario}">
-            <button>Eliminar</button>
-          </form>
-        </div>
-      `).join("");
+            <div class="admin-actions">
+              <input
+                type="password"
+                placeholder="Nueva contraseña"
+                id="pass-${a.usuario}"
+              >
+              <button onclick="cambiarPassword('${a.usuario}')">
+                Actualizar
+              </button>
+
+              <button onclick="eliminarAdmin('${a.usuario}')">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    })
+    .catch(() => {
+      mostrarMensaje("Error cargando administradores", "error");
     });
 }
+
 
 // ----------------------- NAV PANEL (solo admins) -----------------------
 fetch("/api/session")

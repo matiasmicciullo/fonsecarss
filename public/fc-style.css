@@ -522,6 +522,21 @@ header {
   }
 }
 
+.admin-messages {
+  background: #2b2b2b;
+  border-left: 4px solid #d4af37;
+  padding: 12px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+.admin-messages.error {
+  border-color: #ff4c4c;
+}
+.admin-messages.success {
+  border-color: #4caf50;
+}
+
+
 /* ================= FILTROS VEHÍCULOS ================= */
 
 .filtros-vehiculos {

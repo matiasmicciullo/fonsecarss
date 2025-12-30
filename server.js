@@ -249,18 +249,48 @@ app.get("/api/admins", auth, (req, res) => {
 
 app.post("/api/admin/eliminar", auth, (req, res) => {
   if (req.session.usuario !== "Fonsecars") {
-    return res.status(403).send("No autorizado");
+    return res.status(403).json({ error: "No autorizado" });
   }
 
   if (req.body.usuario === "Fonsecars") {
-    return res.status(400).send("No se puede eliminar el super administrador");
+    return res.status(400).json({
+      error: "No se puede eliminar el super administrador"
+    });
   }
 
   db.prepare("DELETE FROM admin WHERE usuario = ?")
     .run(req.body.usuario);
 
-  res.redirect("/admin.html");
+  res.json({ ok: true });
 });
+
+// -------------------- CAMBIAR PASSWORD DE ADMIN --------------------
+app.post("/api/admin/password", auth, (req, res) => {
+  if (req.session.usuario !== "Fonsecars") {
+    return res.status(403).json({ error: "No autorizado" });
+  }
+
+  const { usuario, password } = req.body;
+
+  if (!usuario || !password) {
+    return res.status(400).json({ error: "Datos incompletos" });
+  }
+
+  if (usuario === "Fonsecars") {
+    return res.status(400).json({
+      error: "No se puede cambiar la contraseña del super administrador"
+    });
+  }
+
+  const hash = bcrypt.hashSync(password, 10);
+
+  db.prepare("UPDATE admin SET password = ? WHERE usuario = ?")
+    .run(hash, usuario);
+
+  res.json({ ok: true });
+});
+
+
 
 
 // -------------------- SERVER --------------------
